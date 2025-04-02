@@ -6,7 +6,6 @@ import AttendanceSystem from "./build/contracts/AttendanceSystem.json";
 const Login = () => {
     const [account, setAccount] = useState("");
     const [contract, setContract] = useState(null);
-    const [role, setRole] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
 
@@ -52,7 +51,6 @@ const Login = () => {
             // Check if the user is an admin
             const isAdmin = await contract.methods.isAdmin(account).call();
             if (isAdmin) {
-                // setRole("admin");
                 navigate("/admin-dashboard");
                 return;
             }
@@ -60,7 +58,6 @@ const Login = () => {
             // Check if the user is a faculty member
             const isFaculty = await contract.methods.isFaculty(account).call();
             if (isFaculty) {
-                // setRole("faculty");
                 navigate("/faculty-dashboard");
                 return;
             }
@@ -68,7 +65,6 @@ const Login = () => {
             // Check if the user is a student
             const isStudent = await contract.methods.isStudent(account).call();
             if (isStudent) {
-                // setRole("student");
                 navigate("/student-dashboard");
                 return;
             }
@@ -81,11 +77,19 @@ const Login = () => {
     };
 
     return (
-        <div>
-            <h2>Login</h2>
-            <p>Connected MetaMask Address: {account || "Not connected"}</p>
-            <button onClick={loginUser}>Login</button>
-            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+        <div className="pt-5 pb-5"> 
+            <nav className="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
+                <h1 className="navbar-brand ms-3">Login</h1>
+            </nav>
+            <div id="loginDiv" class="mt-5 container d-flex flex-column justify-content-lg-start">
+                <center><h2 className="text-3xl font-bold mb-6">Login</h2></center> <br/>
+                <h4>Connected MetaMask Address:</h4>
+                <p className="text-truncate">{account || "Not connected"}</p> <br/>
+                <center>
+                    <button className="submitBtn rounded" onClick={loginUser}>Login</button>
+                </center>
+                {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+            </div>
         </div>
     );
 };

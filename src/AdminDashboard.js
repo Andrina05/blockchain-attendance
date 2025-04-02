@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Web3 from "web3";
 import { useNavigate } from "react-router-dom";
 import AttendanceSystem from "./build/contracts/AttendanceSystem.json";
+import { Form, FormGroup, Label, Input, Button } from "reactstrap";
 
 const AdminDashboard = () => {
     const [account, setAccount] = useState("");
@@ -13,6 +14,8 @@ const AdminDashboard = () => {
     // Form states for adding data
     const [deptCode, setDeptCode] = useState("");
     const [deptName, setDeptName] = useState("");
+
+    const [subDept, setSubDept] = useState("");
     const [subjectCode, setSubjectCode] = useState("");
     const [subjectName, setSubjectName] = useState("");
 
@@ -105,152 +108,235 @@ const AdminDashboard = () => {
 
     const addDepartment = async () => {
         if (!contract || !deptCode || !deptName) return;
-
-        try {
-            await contract.methods.addDepartment(deptCode, deptName).send({ from: account });
-            alert("Department added successfully!");
-            fetchAdminData(contract);
-        } catch (error) {
-            console.error("Error adding department:", error);
+        else {
+            try {
+                await contract.methods.addDepartment(deptCode, deptName).send({ from: account });
+                alert("Department added successfully!");
+                fetchAdminData(contract);
+            } catch (error) {
+                console.error("Error adding department:", error);
+                alert("Failed to add department. Please check the details and try again.")
+            }
         }
     };
+    const clearDepartmentDetails = () => {
+        setDeptCode("");
+        setDeptName("");
+    }
 
     const addSubject = async () => {
-        if (!contract || !deptCode || !subjectCode || !subjectName) return;
-
-        try {
-            await contract.methods.addSubject(deptCode, subjectCode, subjectName).send({ from: account });
-            alert("Subject added successfully!");
-            fetchAdminData(contract);
-        } catch (error) {
-            console.error("Error adding subject:", error);
+        if (!contract || !subDept || !subjectCode || !subjectName) return;
+        else {
+            try {
+                await contract.methods.addSubject(subDept, subjectCode, subjectName).send({ from: account });
+                alert("Subject added successfully!");
+                fetchAdminData(contract);
+            } catch (error) {
+                console.error("Error adding subject:", error);
+                alert("Failed to add subject. Please check the details and try again.")
+            }
         }
     };
+    const clearSubjecttDetails = () => {
+        setSubDept("");
+        setSubjectCode("");
+        setSubjectName("");
+    }
 
     const addFaculty = async () => {
         if (!contract || !facultyAddress || !facultyName || !facultyDept) return;
-
-        try {
-            await contract.methods.registerFaculty(facultyAddress, facultyName, facultyDept).send({ from: account });
-            alert("Faculty registered successfully!");
-            fetchAdminData(contract);
-        } catch (error) {
-            console.error("Error adding faculty:", error);
+        else {
+            try {
+                await contract.methods.registerFaculty(facultyAddress, facultyName, facultyDept).send({ from: account });
+                alert("Faculty registered successfully!");
+                fetchAdminData(contract);
+            } catch (error) {
+                console.error("Error adding faculty:", error);
+                alert("Failed to register faculty. Please check the details and try again.")
+            }
         }
     };
+    const clearFacultyDetails = () => {
+        setFacultyAddress("");
+        setFacultyName("");
+        setFacultyDept("");
+    }
 
     const addStudent = async () => {
         if (!contract || !studentAddress || !studentId || !studentName || !studentDept) return;
-
-        try {
-            await contract.methods.registerStudent(studentAddress, studentId, studentName, studentDept).send({ from: account });
-            alert("Student registered successfully!");
-            fetchAdminData(contract);
-        } catch (error) {
-            console.error("Error adding student:", error);
+        else {
+            try {
+                await contract.methods.registerStudent(studentAddress, studentId, studentName, studentDept).send({ from: account });
+                alert("Student registered successfully!");
+                fetchAdminData(contract);
+            } catch (error) {
+                console.error("Error adding student:", error);
+                alert("Failed to register student. Please check the details and try again.")
+            }
         }
     };
+    const clearStudentDetails = () => {
+        setStudentAddress("");
+        setStudentId("");
+        setStudentName("");
+        setStudentDept("");
+    }
 
     return (
         <div>
-            <h2>Admin Dashboard</h2>
-            <p>Connected MetaMask Address: {account}</p>
+            <nav className="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
+                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                <div className="collapse navbar-collapse" id="collapsibleNavbar">
+                    <h1 className="navbar-brand ms-3">Admin Dashboard</h1>
+                    <ul className="navbar-nav">
+                        <li className="nav-item">
+                            <a className="nav-link" href="#AddDept">Add Department</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#AddSubject">Add Subject</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#AddFaculty">Add Faculty</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#AddStudent">Add Student</a>
+                        </li>
+                    </ul>
+                </div>
+                <a className="nav-link" href="/">
+                    <button type="button" id="logoutBtn" className="rounded me-2">Logout</button>
+                </a>
+            </nav>
+            <br /><br/><br />
+            <center><h2>Admin Dashboard</h2></center> <br />
 
             {/* Add Department Section */}
-            <div>
-                <h3>Add Department</h3>
-                <input
-                    type="text"
-                    placeholder="Department Code"
-                    value={deptCode}
-                    onChange={(e) => setDeptCode(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Department Name"
-                    value={deptName}
-                    onChange={(e) => setDeptName(e.target.value)}
-                />
-                <button onClick={addDepartment}>Add Department</button>
+            <div className="container d-flex justify-content-center">
+                <form id="AddDept" className="addForm">
+                    <center><h3>Add Department</h3></center><br />
+                    <div className="form-row">
+                        <div className="form-group col-md-6 col-sm-12">
+                            <label for="DeptCode">Enter Department Code:</label>
+                            <input type="text" className="form-control" name="DeptCode" placeholder="Department Code"
+                                value={deptCode} onChange={(e) => setDeptCode(e.target.value)} required />
+                        </div>
+                        <div className="form-group col-md-6 col-sm-12">
+                            <label for="DeptName">Enter Department Name:</label>
+                            <input type="text" className="form-control" name="DeptName" placeholder="Department Name"
+                                value={deptName} onChange={(e) => setDeptName(e.target.value)} required />
+                        </div>
+                    </div>
+                    <br />
+                    <center>
+                        <button className="submitBtn rounded mb-2 me-2" onClick={addDepartment}>Add Department</button>
+                        <button className="clearBtn rounded" onClick={clearDepartmentDetails}>Clear</button>
+                    </center>
+                </form>
             </div>
 
+
             {/* Add Subject Section */}
-            <div>
-                <h3>Add Subject</h3>
-                <input
-                    type="text"
-                    placeholder="Department Code"
-                    value={deptCode}
-                    onChange={(e) => setDeptCode(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Subject Code"
-                    value={subjectCode}
-                    onChange={(e) => setSubjectCode(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Subject Name"
-                    value={subjectName}
-                    onChange={(e) => setSubjectName(e.target.value)}
-                />
-                <button onClick={addSubject}>Add Subject</button>
+            <br /><br />
+            <div className="container d-flex justify-content-center">
+                <form id="AddSubject" className="addForm">
+                    <center><h3>Add Subject</h3></center><br />
+                    <div className="form-row">
+                        <div className="form-group col-md-6 col-sm-12">
+                            <label for="SubDeptCode">Enter Department Code:</label>
+                            <input type="text" className="form-control" name="SubDeptCode" placeholder="Department Code"
+                                value={subDept} onChange={(e) => setSubDept(e.target.value)} required />
+                        </div>
+                        <div className="form-group col-md-6 col-sm-12">
+                            <label for="SubCode">Enter Subject Code:</label>
+                            <input type="text" className="form-control" name="SubCode" placeholder="Subject Code"
+                                value={subjectCode} onChange={(e) => setSubjectCode(e.target.value)} required />
+                        </div>
+                    </div>
+                    <div className="form-row">
+                        <div className="form-group col-md-6 col-sm-12">
+                            <label for="SubName">Enter Subject Name:</label>
+                            <input type="text" className="form-control" name="SubName" placeholder="Subject Name"
+                                value={subjectName} onChange={(e) => setSubjectName(e.target.value)} required />
+                        </div>
+                    </div>
+                    <br />
+                    <center>
+                        <button className="submitBtn rounded mb-2 me-2" onClick={addSubject}>Add Subject</button>
+                        <button className="clearBtn rounded" onClick={clearSubjecttDetails}>Clear</button>
+                    </center>
+                </form>
             </div>
 
             {/* Register Faculty Section */}
-            <div>
-                <h3>Register Faculty</h3>
-                <input
-                    type="text"
-                    placeholder="Faculty Address"
-                    value={facultyAddress}
-                    onChange={(e) => setFacultyAddress(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Faculty Name"
-                    value={facultyName}
-                    onChange={(e) => setFacultyName(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Department Code"
-                    value={facultyDept}
-                    onChange={(e) => setFacultyDept(e.target.value)}
-                />
-                <button onClick={addFaculty}>Register Faculty</button>
+            <br /><br />
+            <div className="container d-flex justify-content-center">
+                <form id="AddFaculty" className="addForm">
+                    <center><h3>Register Faculty</h3></center><br />
+                    <div className="form-row">
+                        <div className="form-group col-md-6 col-sm-12">
+                            <label for="FacultyAddr">Enter Faculty Address:</label>
+                            <input type="text" className="form-control" name="FacultyAddr" placeholder="Metamask Address (0x...)"
+                                value={facultyAddress} onChange={(e) => setFacultyAddress(e.target.value)} required />
+                        </div>
+                        <div className="form-group col-md-6 col-sm-12">
+                            <label for="FacultyName">Enter Faculty Name:</label>
+                            <input type="text" className="form-control" name="FacultyName" placeholder="FirstName LastName"
+                                value={facultyName} onChange={(e) => setFacultyName(e.target.value)} required />
+                        </div>
+                    </div>
+                    <div className="form-row">
+                        <div className="form-group col-md-6 col-sm-12">
+                            <label for="FacultyDeptCode">Enter Faculty's Department Code:</label>
+                            <input type="text" className="form-control" name="FacultyDeptCode" placeholder="Department Code"
+                                value={facultyDept} onChange={(e) => setFacultyDept(e.target.value)} required />
+                        </div>
+                    </div>
+                    <br />
+                    <center>
+                        <button className="submitBtn rounded mb-2 me-2" onClick={addFaculty}>Register Faculty</button>
+                        <button className="clearBtn rounded" onClick={clearFacultyDetails}>Clear</button>
+                    </center>
+                </form>
             </div>
 
-            {/* Register Student Section */}
-            <div>
-                <h3>Register Student</h3>
-                <input
-                    type="text"
-                    placeholder="Student Address"
-                    value={studentAddress}
-                    onChange={(e) => setStudentAddress(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Student ID"
-                    value={studentId}
-                    onChange={(e) => setStudentId(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Student Name"
-                    value={studentName}
-                    onChange={(e) => setStudentName(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Department Code"
-                    value={studentDept}
-                    onChange={(e) => setStudentDept(e.target.value)}
-                />
-                <button onClick={addStudent}>Register Student</button>
+            <br /><br />
+            <div className="container d-flex justify-content-center">
+                <form id="AddStudent" className="addForm">
+                    <center><h3>Register Student</h3></center><br />
+                    <div className="form-row">
+                        <div className="form-group col-md-6 col-sm-12">
+                            <label for="StudentAddr">Enter Student Address:</label>
+                            <input type="text" className="form-control" name="StudentAddr" placeholder="Metamask Address (0x...)"
+                                value={studentAddress} onChange={(e) => setStudentAddress(e.target.value)} required />
+                        </div>
+                        <div className="form-group col-md-6 col-sm-12">
+                            <label for="StudentID">Enter Student Roll No.:</label>
+                            <input type="text" className="form-control" name="StudentID" placeholder="Roll no."
+                                value={studentId} onChange={(e) => setStudentId(e.target.value)} required />
+                        </div>
+                    </div>
+                    <div className="form-row">
+                        <div className="form-group col-md-6 col-sm-12">
+                            <label for="StudentName">Enter Student Name:</label>
+                            <input type="text" className="form-control" name="StudentName" placeholder="FirstName LastName"
+                                value={studentName} onChange={(e) => setStudentName(e.target.value)} required />
+                        </div>
+                        <div className="form-group col-md-6 col-sm-12">
+                            <label for="StudentDeptCode">Enter Student's Department Code:</label>
+                            <input type="text" className="form-control" name="StudentDeptCode" placeholder="Department Code"
+                                value={studentDept} onChange={(e) => setStudentDept(e.target.value)} required />
+                        </div>
+                    </div>
+                    <br />
+                    <center>
+                        <button className="submitBtn rounded mb-2 me-2" onClick={addStudent}>Register Student</button>
+                        <button className="clearBtn rounded" onClick={clearStudentDetails}>Clear</button>
+                    </center>
+                </form>
             </div>
+
 
             {/* Display Departments */}
             <h3>Departments</h3>

@@ -2,29 +2,38 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const Welcome = () => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold mb-6">Blockchain-based Attendance System</h1>
-      <div className="flex space-x-4">
-        <button
-          onClick={() => navigate("/register-admin")}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          Register as Admin
-        </button>
-        <a href="/login">
-        <button
-          onClick={() => navigate("/login")}
-          className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
-        >
-          Login
-        </button>
-        </a>
-      </div>
-    </div>
-  );
+    return (
+        <div className="pt-5 pb-5">
+            <nav className="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
+                <h1 className="navbar-brand ms-3">Welcome</h1>
+            </nav>
+
+            <center>
+                <div id="welcomeBox" className="mt-5 container rounded ">
+                    <h1 className="text-3xl font-bold mb-6">Blockchain-based Attendance System</h1> <br />
+                    <div>
+                        <button
+                            onClick={() => navigate("/register-admin")}
+                            className="welcomeBtn rounded"
+                        >
+                            Register as Admin
+                        </button>
+                        <br /><br />
+                        <a href="/login">
+                            <button
+                                onClick={() => navigate("/login")}
+                                className="welcomeBtn rounded"
+                            >
+                                Login
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </center>
+        </div>
+    );
 };
 
 export default Welcome;

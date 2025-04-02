@@ -8,6 +8,7 @@ import AdminDashboard from "./AdminDashboard.js";
 import FacultyDashboard from "./FacultyDashboard.js";
 import StudentDashboard from "./StudentDashboard.js";
 import AdminRegister from "./AdminRegister.js";
+import './App.css';
 
 const App = () => {
   const [account, setAccount] = useState(null);

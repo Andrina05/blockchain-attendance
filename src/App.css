@@ -1,38 +1,125 @@
-.App {
-  text-align: center;
+.submitBtn {
+  background-color:green;
+  padding: 5px 15px;
+  font-size: 25px;
+  color: white;
+  transition: transform 0.3s;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.submitBtn:hover {
+  transform: scale(1.05);
+  background-color:rgb(42, 178, 42);
+}
+.clearBtn {
+  background-color:red;
+  padding: 5px 15px;
+  font-size: 25px;
+  color: white;
+  transition: transform 0.3s;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.clearBtn:hover {
+  transform: scale(1.05);
+  background-color: rgb(255, 84, 84);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+#logoutBtn {
+  background-color:beige;
+  padding: 5px 15px;
+  font-size: 15px;
+  color: black;
+  transition: transform 0.3s;
+}
+
+#logoutBtn:hover {
+  transform: scale(1.05);
+  background-color:rgb(251, 251, 198);
+}
+
+
+/* welcome page */
+#welcomeDiv {
+  background-color: bisque;
+  background-size: 100%;
+  background-position: center;
+  width:100%;
+  height: fit-content;
+  padding: 40px;
+}
+
+#welcomeBox {
+  background-color:snow;
+  border-style: solid;
+  border-color: black;
+  border-radius: 10px;
+  padding: 35px;
+  font-size: 15pt;
+  width: 50%;
+}
+
+.welcomeBtn {
+  background-color: darkblue;
+  padding: 5px 15px;
+  font-size: 25px;
+  color: white;
+  transition: transform 0.3s;
+}
+
+.welcomeBtn:hover {
+  transform: scale(1.05);
+  background-color: rgb(50, 50, 211);
+}
+
+/* admin register */
+#adminDiv {
+  background-color: aliceblue;
+  border-style: solid;
+  border-color: black;
+  border-radius: 10px;
+  padding: 20px 20px 20px 20px;
+  width: 50%;
+}
+
+/* login */
+#loginDiv {
+  background-color: aliceblue;
+  border-style: solid;
+  border-color: black;
+  border-radius: 10px;
+  padding: 20px 20px 20px 20px;
+  width: 65%;
+}
+
+/* admin dashboard */
+.addForm {
+  background-color: aliceblue;
+  border-style: solid;
+  border-color: black;
+  border-radius: 10px;
+  padding: 20px 20px 20px 20px;
+  width: 55%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  height: fit-content
 }
 
-.App-link {
-  color: #61dafb;
+/* faculty dashboard */
+.attendTable {
+  border: 1px solid;
+  border-color: black;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* student dashboard */
+.tableSpace {
+  background-color: aliceblue;
+  border-style: solid;
+  border-color: black;
+  border-radius: 10px;
+  padding: 20px 20px 20px 20px;
+  flex-direction: column;
+  height: auto;
+}
+
+tr, th, td {
+  padding: 15px;
 }
