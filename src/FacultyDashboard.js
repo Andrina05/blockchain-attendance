@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Web3 from "web3";
-import { useNavigate } from "react-router-dom";
-import AttendanceSystem from "./build/contracts/AttendanceSystem.json"; // Adjust the path as needed
+import AttendanceSystem from "./build/contracts/AttendanceSystem.json";
 
 const FacultyDashboard = () => {
     const [account, setAccount] = useState("");
@@ -12,8 +11,6 @@ const FacultyDashboard = () => {
     const [students, setStudents] = useState([]);
     const [attendance, setAttendance] = useState({});
     const [lectureTime, setLectureTime] = useState("");
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         const loadBlockchainData = async () => {
@@ -49,13 +46,12 @@ const FacultyDashboard = () => {
             try {
                 const studentList = await contract.methods.getStudentsByDepartment(departmentCode).call();
                 const formattedStudents = studentList.map(student => ({
-                    // address: student.studentAddress,
+                    address: student.studentAddress,
                     studentId: student.studentId,
                     name: student.name,
                     department: student.department
                 }));
                 setStudents(formattedStudents);
-                console.log(formattedStudents);
 
                 // Initialize attendance state for each student
                 let initialAttendance = {};
@@ -79,13 +75,13 @@ const FacultyDashboard = () => {
         }
         else {
             try {
+                const studentAddresses = students.map((student) => student.address);
                 const studentIds = students.map((student) => student.studentId);
-                console.log(studentIds);
                 const statuses = studentIds.map((id) => attendance[id] === "Present");
-                console.log(statuses);
 
+                console.log(departmentCode, subCode, subject, lectureTime, studentAddresses, studentIds, statuses)
                 await contract.methods
-                    .markAttendance(subCode, subject, lectureTime, studentIds, statuses)
+                    .markAttendance(departmentCode, subCode, subject, lectureTime, studentAddresses, studentIds, statuses)
                     .send({ from: account });
 
                 alert("Attendance marked successfully!");

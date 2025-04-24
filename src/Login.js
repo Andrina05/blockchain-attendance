@@ -37,7 +37,6 @@ const Login = () => {
                 setErrorMessage("MetaMask is not installed. Please install it.");
             }
         };
-
         loadBlockchainData();
     }, []);
 
@@ -81,7 +80,7 @@ const Login = () => {
             <nav className="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
                 <h1 className="navbar-brand ms-3">Login</h1>
             </nav>
-            <div id="loginDiv" class="mt-5 container d-flex flex-column justify-content-lg-start">
+            <div id="loginDiv" className="mt-5 container d-flex flex-column justify-content-lg-start">
                 <center><h2 className="text-3xl font-bold mb-6">Login</h2></center> <br/>
                 <h4>Connected MetaMask Address:</h4>
                 <p className="text-truncate">{account || "Not connected"}</p> <br/>
@@ -93,5 +92,4 @@ const Login = () => {
         </div>
     );
 };
-
 export default Login;

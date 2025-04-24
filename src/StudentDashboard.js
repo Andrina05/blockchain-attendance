@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Web3 from "web3";
-import { useNavigate } from "react-router-dom";
 import AttendanceSystem from "./build/contracts/AttendanceSystem.json";
 
 const StudentDashboard = () => {
@@ -10,7 +9,7 @@ const StudentDashboard = () => {
     const [attendanceRecords, setAttendanceRecords] = useState([]);
     const [overallAttendance, setOverallAttendance] = useState(0);
 
-    const navigate = useNavigate();
+    let studDept = "";
 
     useEffect(() => {
         const loadBlockchainData = async () => {
@@ -30,7 +29,6 @@ const StudentDashboard = () => {
                     );
                     setContract(instance);
                     fetchStudentData(instance, accounts[0]);
-                    fetchStudentAttendance(instance, accounts[0]);
                 } else {
                     console.error("Smart contract not deployed on this network.");
                 }
@@ -43,22 +41,21 @@ const StudentDashboard = () => {
     const fetchStudentData = async (contractInstance, studentAddress) => {
         try {
             const fetchedDetails = await contractInstance.methods.getStudentDetails(studentAddress).call();
-            console.log(fetchedDetails[0])
-            console.log(fetchedDetails[1])
-            console.log(fetchedDetails[2])
+            console.log("Fetched Details:", fetchedDetails[0], fetchedDetails[1], fetchedDetails[2])
             const studentId = fetchedDetails[0];
             const studentName = fetchedDetails[1];
-            const studentDept = fetchedDetails[2]
+            studDept = fetchedDetails[2];
 
-            setStudentData({ studentId, studentName, studentDept });
+            setStudentData({ studentId, studentName, studDept });
+            fetchStudentAttendance(contractInstance, studentAddress, studDept);
         } catch (error) {
             console.error("Error fetching student data:", error);
         }
     };
 
-    const fetchStudentAttendance = async (contractInstance, studentAddress) => {
+    const fetchStudentAttendance = async (contractInstance, studentAddress, studentDepartment) => {
         try {
-            const attendance = await contractInstance.methods.getStudentAttendance(studentAddress).call();
+            const attendance = await contractInstance.methods.getStudentAttendance(studentAddress, studentDepartment).call();
             processAttendanceData(attendance);
         } catch (error) {
             console.error("Error fetching student attendance:", error);
@@ -129,7 +126,7 @@ const StudentDashboard = () => {
                 {studentData && (
                     <div className="bg-light col-sm-12 col-md-10 col-lg-7 pt-1 pb-1">
                         <p>ID: {studentData.studentId}</p>
-                        <p>Department: {studentData.studentDept}</p>
+                        <p>Department: {studentData.studDept}</p>
                     </div>
                 )}
                 <br/>
@@ -159,5 +156,4 @@ const StudentDashboard = () => {
         </div>
     );
 };
-
 export default StudentDashboard;

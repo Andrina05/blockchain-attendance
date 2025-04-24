@@ -103,6 +103,19 @@
   height: fit-content
 }
 
+.card {
+  margin: 10px 0;
+  border: none;
+  height:200px;
+  overflow-y: scroll;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+.card-body {
+  padding: 15px;
+}
+
 /* faculty dashboard */
 .attendTable {
   border: 1px solid;
@@ -110,6 +123,13 @@
 }
 
 /* student dashboard */
+.studentDetails {
+  margin: 10px 0;
+  border: none;
+  height: 90px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
 .tableSpace {
   background-color: aliceblue;
   border-style: solid;

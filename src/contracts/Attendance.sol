@@ -15,7 +15,8 @@ contract AttendanceSystem {
     }
     
     struct Student {
-        string studentId;
+        address studentAddress;
+        uint studentId;
         string name;
         string department;
         bool exists;
@@ -52,10 +53,10 @@ contract AttendanceSystem {
     mapping(address => Faculty) public faculties;
     mapping(address => Student) public students;
     mapping(string => Department) public departments;
-    mapping(string => Subject) public subjects;
+    mapping(string => mapping(string => Subject)) public subjects;
     mapping(string => address[]) public departmentStudents;
-    mapping(uint => AttendanceRecord[]) public studentAttendance;
-    mapping(address => PerStudentAttendance[]) public perStudentAttendances;
+    mapping(string => AttendanceRecord[]) public studentAttendance;
+    mapping(string => mapping(address => PerStudentAttendance[])) public perStudentAttendances;
 
     string[] public departmentKeys;
     address[] public facultyAddresses;
@@ -97,8 +98,9 @@ contract AttendanceSystem {
     }
 
     function addSubject(string memory deptCode, string memory subCode, string memory subName) public onlyAdmin {
-        require(!subjects[deptCode].exists, "Subject already added.");
-        subjects[deptCode] = Subject(subCode, subName, true);
+        require(departments[deptCode].exists, "Department does not exist.");
+        require(!subjects[deptCode][subCode].exists, "Subject already added.");
+        subjects[deptCode][subCode] = Subject(subCode, subName, true);
     }
 
     function registerFaculty(address facultyAddress, string memory facultyName, string memory facultyDept) public onlyAdmin {
@@ -108,10 +110,10 @@ contract AttendanceSystem {
         facultyAddresses.push(facultyAddress);
     }
 
-    function registerStudent(address studentAddress, string memory studentId, string memory studentName, string memory studentDept) public onlyAdmin {
+    function registerStudent(address studentAddress, uint studentId, string memory studentName, string memory studentDept) public onlyAdmin {
         require(!students[studentAddress].exists, "Student already registered");
         require(departments[studentDept].exists, "Department does not exist");
-        students[studentAddress] = Student(studentId, studentName, studentDept, true);
+        students[studentAddress] = Student(studentAddress, studentId, studentName, studentDept, true);
         departmentStudents[studentDept].push(studentAddress);
         studentAddresses.push(studentAddress);
     }
@@ -130,7 +132,7 @@ contract AttendanceSystem {
     
     function getStudentsByDepartment(string memory departmentCode) public view returns (Student[] memory) {
         address[] memory deptStudentAddresses = departmentStudents[departmentCode];
-        Student[] memory studentList = new Student[](studentAddresses.length);
+        Student[] memory studentList = new Student[](deptStudentAddresses.length);
         for (uint i = 0; i < deptStudentAddresses.length; i++) {
             studentList[i] = students[deptStudentAddresses[i]];
         }
@@ -138,12 +140,14 @@ contract AttendanceSystem {
     }
     
     function markAttendance(
+        string memory deptCode,
         string memory subjectCode, 
         string memory subjectName, 
         string memory lectureTime,
+        address[] memory studentAddrs,
         uint[] memory studentIds,
         bool[] memory statuses
-    ) public  {     // view returns (AttendanceRecord memory)
+    ) public  {
         require(faculties[msg.sender].exists, "Not a faculty member");
         require(studentIds.length == statuses.length, "Mismatched arrays");
         
@@ -154,27 +158,26 @@ contract AttendanceSystem {
         newRecord.lectureTime = lectureTime;
         newRecord.studentIds = studentIds;
         newRecord.attendanceStatuses = statuses;
-
+        studentAttendance[deptCode].push(newRecord);
+        
         for (uint i = 0; i < studentIds.length; i++) {
-            studentAttendance[studentIds[i]].push(newRecord);
-
             PerStudentAttendance memory newStudentAttendance;
             newStudentAttendance.studentSubjectCode = newRecord.subjectCode;
             newStudentAttendance.studentSubjectName = newRecord.subjectName;
             newStudentAttendance.studentLectureTime = newRecord.lectureTime;
             newStudentAttendance.studentId = studentIds[i];
             newStudentAttendance.studentAttendanceStatus = statuses[i];
-            perStudentAttendances[studentAddresses[i]].push(newStudentAttendance);
+            perStudentAttendances[deptCode][studentAddrs[i]].push(newStudentAttendance);
         }
     }
 
-    function getStudentDetails(address studentAddress) public view returns (string memory, string memory, string memory) {
+    function getStudentDetails(address studentAddress) public view returns (uint, string memory, string memory) {
         require(students[studentAddress].exists, "Student not found");
         Student memory student = students[studentAddress];
         return (student.studentId, student.name, student.department);
     }
     
-    function getStudentAttendance(address studentAddress) public view returns (PerStudentAttendance[] memory) {
-        return perStudentAttendances[studentAddress];
+    function getStudentAttendance(address studentAddress, string memory deptCode) public view returns (PerStudentAttendance[] memory) {
+        return perStudentAttendances[deptCode][studentAddress];
     }
 }

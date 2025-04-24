@@ -172,6 +172,11 @@ const contractABI =
         {
             "inputs": [
                 {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
                     "internalType": "address",
                     "name": "",
                     "type": "address"
@@ -237,9 +242,9 @@ const contractABI =
         {
             "inputs": [
                 {
-                    "internalType": "uint256",
+                    "internalType": "string",
                     "name": "",
-                    "type": "uint256"
+                    "type": "string"
                 },
                 {
                     "internalType": "uint256",
@@ -280,9 +285,14 @@ const contractABI =
             "name": "students",
             "outputs": [
                 {
-                    "internalType": "string",
+                    "internalType": "address",
+                    "name": "studentAddress",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
                     "name": "studentId",
-                    "type": "string"
+                    "type": "uint256"
                 },
                 {
                     "internalType": "string",
@@ -306,6 +316,11 @@ const contractABI =
         },
         {
             "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
                 {
                     "internalType": "string",
                     "name": "",
@@ -484,9 +499,9 @@ const contractABI =
                     "type": "address"
                 },
                 {
-                    "internalType": "string",
+                    "internalType": "uint256",
                     "name": "studentId",
-                    "type": "string"
+                    "type": "uint256"
                 },
                 {
                     "internalType": "string",
@@ -559,9 +574,14 @@ const contractABI =
                 {
                     "components": [
                         {
-                            "internalType": "string",
+                            "internalType": "address",
+                            "name": "studentAddress",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "uint256",
                             "name": "studentId",
-                            "type": "string"
+                            "type": "uint256"
                         },
                         {
                             "internalType": "string",
@@ -592,6 +612,11 @@ const contractABI =
             "inputs": [
                 {
                     "internalType": "string",
+                    "name": "deptCode",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
                     "name": "subjectCode",
                     "type": "string"
                 },
@@ -604,6 +629,11 @@ const contractABI =
                     "internalType": "string",
                     "name": "lectureTime",
                     "type": "string"
+                },
+                {
+                    "internalType": "address[]",
+                    "name": "studentAddrs",
+                    "type": "address[]"
                 },
                 {
                     "internalType": "uint256[]",
@@ -632,9 +662,9 @@ const contractABI =
             "name": "getStudentDetails",
             "outputs": [
                 {
-                    "internalType": "string",
+                    "internalType": "uint256",
                     "name": "",
-                    "type": "string"
+                    "type": "uint256"
                 },
                 {
                     "internalType": "string",
@@ -657,6 +687,11 @@ const contractABI =
                     "internalType": "address",
                     "name": "studentAddress",
                     "type": "address"
+                },
+                {
+                    "internalType": "string",
+                    "name": "deptCode",
+                    "type": "string"
                 }
             ],
             "name": "getStudentAttendance",

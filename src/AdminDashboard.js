@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Web3 from "web3";
 import { useNavigate } from "react-router-dom";
 import AttendanceSystem from "./build/contracts/AttendanceSystem.json";
-import { Form, FormGroup, Label, Input, Button } from "reactstrap";
 
 const AdminDashboard = () => {
     const [account, setAccount] = useState("");
@@ -106,17 +105,19 @@ const AdminDashboard = () => {
         }
     };
 
-    const addDepartment = async () => {
-        if (!contract || !deptCode || !deptName) return;
-        else {
-            try {
-                await contract.methods.addDepartment(deptCode, deptName).send({ from: account });
-                alert("Department added successfully!");
-                fetchAdminData(contract);
-            } catch (error) {
-                console.error("Error adding department:", error);
-                alert("Failed to add department. Please check the details and try again.")
-            }
+    const addDepartment = async (event) => {
+        event.preventDefault();
+        if (!contract || !deptCode || !deptName) {
+            alert("Please fill all the details.");
+            return;
+        }
+        try {
+            await contract.methods.addDepartment(deptCode, deptName).send({ from: account });
+            alert("Department added successfully!");
+            fetchAdminData(contract);
+        } catch (error) {
+            console.error("Error adding department:", error);
+            alert("Failed to add department. Please check the details and try again.");
         }
     };
     const clearDepartmentDetails = () => {
@@ -124,18 +125,21 @@ const AdminDashboard = () => {
         setDeptName("");
     }
 
-    const addSubject = async () => {
-        if (!contract || !subDept || !subjectCode || !subjectName) return;
-        else {
-            try {
-                await contract.methods.addSubject(subDept, subjectCode, subjectName).send({ from: account });
-                alert("Subject added successfully!");
-                fetchAdminData(contract);
-            } catch (error) {
-                console.error("Error adding subject:", error);
-                alert("Failed to add subject. Please check the details and try again.")
-            }
+    const addSubject = async (event) => {
+        event.preventDefault();
+        if (!contract || !subDept || !subjectCode || !subjectName) {
+            alert("Please fill all the details.");
+            return;
         }
+
+        try {
+            await contract.methods.addSubject(subDept, subjectCode, subjectName).send({ from: account });
+            alert("Subject added successfully!");
+            fetchAdminData(contract);
+        } catch (error) {
+            console.error("Error adding subject:", error);
+            alert("Failed to add subject. Please check the details and try again.");
+        } 
     };
     const clearSubjecttDetails = () => {
         setSubDept("");
@@ -143,17 +147,19 @@ const AdminDashboard = () => {
         setSubjectName("");
     }
 
-    const addFaculty = async () => {
-        if (!contract || !facultyAddress || !facultyName || !facultyDept) return;
-        else {
-            try {
-                await contract.methods.registerFaculty(facultyAddress, facultyName, facultyDept).send({ from: account });
-                alert("Faculty registered successfully!");
-                fetchAdminData(contract);
-            } catch (error) {
-                console.error("Error adding faculty:", error);
-                alert("Failed to register faculty. Please check the details and try again.")
-            }
+    const addFaculty = async (event) => {
+        event.preventDefault();
+        if (!contract || !facultyAddress || !facultyName || !facultyDept) {
+            alert("Please fill all the details.");
+            return;
+        }
+        try {
+            await contract.methods.registerFaculty(facultyAddress, facultyName, facultyDept).send({ from: account });
+            alert("Faculty registered successfully!");
+            fetchAdminData(contract);
+        } catch (error) {
+            console.error("Error adding faculty:", error);
+            alert("Failed to register faculty. Please check the details and try again.");
         }
     };
     const clearFacultyDetails = () => {
@@ -162,17 +168,20 @@ const AdminDashboard = () => {
         setFacultyDept("");
     }
 
-    const addStudent = async () => {
-        if (!contract || !studentAddress || !studentId || !studentName || !studentDept) return;
-        else {
-            try {
-                await contract.methods.registerStudent(studentAddress, studentId, studentName, studentDept).send({ from: account });
-                alert("Student registered successfully!");
-                fetchAdminData(contract);
-            } catch (error) {
-                console.error("Error adding student:", error);
-                alert("Failed to register student. Please check the details and try again.")
-            }
+    const addStudent = async (event) => {
+        event.preventDefault();
+        if (!contract || !studentAddress || !studentId || !studentName || !studentDept) {
+            alert("Please fill all the details.");
+            return;
+        }
+        try {
+            await contract.methods.registerStudent(studentAddress, studentId, studentName, studentDept).send({ from: account });
+            alert("Student registered successfully!");
+            fetchAdminData(contract);
+
+        } catch (error) {
+            console.error("Error adding student:", error);
+            alert("Failed to register student. Please check the details and try again.")
         }
     };
     const clearStudentDetails = () => {
@@ -183,7 +192,7 @@ const AdminDashboard = () => {
     }
 
     return (
-        <div>
+        <div className="ps-3 pe-3">
             <nav className="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                     <span className="navbar-toggler-icon"></span>
@@ -209,7 +218,7 @@ const AdminDashboard = () => {
                     <button type="button" id="logoutBtn" className="rounded me-2">Logout</button>
                 </a>
             </nav>
-            <br /><br/><br />
+            <br /><br /><br />
             <center><h2>Admin Dashboard</h2></center> <br />
 
             {/* Add Department Section */}
@@ -218,12 +227,12 @@ const AdminDashboard = () => {
                     <center><h3>Add Department</h3></center><br />
                     <div className="form-row">
                         <div className="form-group col-md-6 col-sm-12">
-                            <label for="DeptCode">Enter Department Code:</label>
+                            <label htmlFor="DeptCode">Enter Department Code:</label>
                             <input type="text" className="form-control" name="DeptCode" placeholder="Department Code"
                                 value={deptCode} onChange={(e) => setDeptCode(e.target.value)} required />
                         </div>
                         <div className="form-group col-md-6 col-sm-12">
-                            <label for="DeptName">Enter Department Name:</label>
+                            <label htmlFor="DeptName">Enter Department Name:</label>
                             <input type="text" className="form-control" name="DeptName" placeholder="Department Name"
                                 value={deptName} onChange={(e) => setDeptName(e.target.value)} required />
                         </div>
@@ -244,19 +253,19 @@ const AdminDashboard = () => {
                     <center><h3>Add Subject</h3></center><br />
                     <div className="form-row">
                         <div className="form-group col-md-6 col-sm-12">
-                            <label for="SubDeptCode">Enter Department Code:</label>
+                            <label htmlFor="SubDeptCode">Enter Department Code:</label>
                             <input type="text" className="form-control" name="SubDeptCode" placeholder="Department Code"
                                 value={subDept} onChange={(e) => setSubDept(e.target.value)} required />
                         </div>
                         <div className="form-group col-md-6 col-sm-12">
-                            <label for="SubCode">Enter Subject Code:</label>
+                            <label htmlFor="SubCode">Enter Subject Code:</label>
                             <input type="text" className="form-control" name="SubCode" placeholder="Subject Code"
                                 value={subjectCode} onChange={(e) => setSubjectCode(e.target.value)} required />
                         </div>
                     </div>
                     <div className="form-row">
                         <div className="form-group col-md-6 col-sm-12">
-                            <label for="SubName">Enter Subject Name:</label>
+                            <label htmlFor="SubName">Enter Subject Name:</label>
                             <input type="text" className="form-control" name="SubName" placeholder="Subject Name"
                                 value={subjectName} onChange={(e) => setSubjectName(e.target.value)} required />
                         </div>
@@ -276,19 +285,19 @@ const AdminDashboard = () => {
                     <center><h3>Register Faculty</h3></center><br />
                     <div className="form-row">
                         <div className="form-group col-md-6 col-sm-12">
-                            <label for="FacultyAddr">Enter Faculty Address:</label>
+                            <label htmlFor="FacultyAddr">Enter Faculty Address:</label>
                             <input type="text" className="form-control" name="FacultyAddr" placeholder="Metamask Address (0x...)"
                                 value={facultyAddress} onChange={(e) => setFacultyAddress(e.target.value)} required />
                         </div>
                         <div className="form-group col-md-6 col-sm-12">
-                            <label for="FacultyName">Enter Faculty Name:</label>
+                            <label htmlFor="FacultyName">Enter Faculty Name:</label>
                             <input type="text" className="form-control" name="FacultyName" placeholder="FirstName LastName"
                                 value={facultyName} onChange={(e) => setFacultyName(e.target.value)} required />
                         </div>
                     </div>
                     <div className="form-row">
                         <div className="form-group col-md-6 col-sm-12">
-                            <label for="FacultyDeptCode">Enter Faculty's Department Code:</label>
+                            <label htmlFor="FacultyDeptCode">Enter Faculty's Department Code:</label>
                             <input type="text" className="form-control" name="FacultyDeptCode" placeholder="Department Code"
                                 value={facultyDept} onChange={(e) => setFacultyDept(e.target.value)} required />
                         </div>
@@ -307,24 +316,24 @@ const AdminDashboard = () => {
                     <center><h3>Register Student</h3></center><br />
                     <div className="form-row">
                         <div className="form-group col-md-6 col-sm-12">
-                            <label for="StudentAddr">Enter Student Address:</label>
+                            <label htmlFor="StudentAddr">Enter Student Address:</label>
                             <input type="text" className="form-control" name="StudentAddr" placeholder="Metamask Address (0x...)"
                                 value={studentAddress} onChange={(e) => setStudentAddress(e.target.value)} required />
                         </div>
                         <div className="form-group col-md-6 col-sm-12">
-                            <label for="StudentID">Enter Student Roll No.:</label>
+                            <label htmlFor="StudentID">Enter Student Roll No.:</label>
                             <input type="text" className="form-control" name="StudentID" placeholder="Roll no."
                                 value={studentId} onChange={(e) => setStudentId(e.target.value)} required />
                         </div>
                     </div>
                     <div className="form-row">
                         <div className="form-group col-md-6 col-sm-12">
-                            <label for="StudentName">Enter Student Name:</label>
+                            <label htmlFor="StudentName">Enter Student Name:</label>
                             <input type="text" className="form-control" name="StudentName" placeholder="FirstName LastName"
                                 value={studentName} onChange={(e) => setStudentName(e.target.value)} required />
                         </div>
                         <div className="form-group col-md-6 col-sm-12">
-                            <label for="StudentDeptCode">Enter Student's Department Code:</label>
+                            <label htmlFor="StudentDeptCode">Enter Student's Department Code:</label>
                             <input type="text" className="form-control" name="StudentDeptCode" placeholder="Department Code"
                                 value={studentDept} onChange={(e) => setStudentDept(e.target.value)} required />
                         </div>
@@ -336,21 +345,27 @@ const AdminDashboard = () => {
                     </center>
                 </form>
             </div>
+            <br /><br />
 
+            <div className="row">
+                {/* Display Departments */}
+                <div className="card col-lg-4 col-sm-12">
+                    <h3>Departments</h3>
+                    <ul>{departments.map((dept, index) => <li key={index}>{dept.name} ({dept.code})</li>)}</ul>
+                </div>
 
-            {/* Display Departments */}
-            <h3>Departments</h3>
-            <ul>{departments.map((dept, index) => <li key={index}>{dept.name} ({dept.code})</li>)}</ul>
+                {/* Display Faculties */}
+                <div className="card col-lg-4 col-sm-12">
+                    <h3>Faculties</h3>
+                    <ul>{faculties.map((faculty, index) => <li key={index}>{faculty.name} - {faculty.department}</li>)}</ul>
+                </div>
 
-            {/* Display Faculties */}
-            <h3>Faculties</h3>
-            <ul>{faculties.map((faculty, index) => <li key={index}>{faculty.name} - {faculty.department}</li>)}</ul>
-
-            {/* Display Students */}
-            <h3>Students</h3>
-            <ul>{students.map((student, index) => <li key={index}>{student.name} - {student.studentId}</li>)}</ul>
-
-            <button onClick={() => navigate("/")}>Logout</button>
+                {/* Display Students */}
+                <div className="card col-lg-4 col-sm-12">
+                    <h3>Students</h3>
+                    <ul>{students.map((student, index) => <li key={index}>{student.name} - {student.studentId}</li>)}</ul>
+                </div>
+            </div>
         </div>
     );
 };

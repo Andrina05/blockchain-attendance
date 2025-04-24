@@ -1,2 +1,3 @@
-const contractAddr = "0x3c84F46DB1F78fB0699E880F1470b59c69c07273";
+// Address of deployed contract (varies in each deployment)
+const contractAddr = "0x1b8c9714770a84F5B3eF7D0c60982cd1A018ED49";
 export default contractAddr;
